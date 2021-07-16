@@ -14,11 +14,15 @@ unsaturated conditions are present, see below.
 ## param.vg 
 If unsaturated conditions are present, then the following van Genutchen parameters file should be written to 
 the SUTRA working directory, "param.vg". The first line of the file is an integer describing the zones in the 
-model, NREG. Each of the following lines then describe the parameters for the respective zone (identified by its 
+model, NREGs. Each of the following lines then describe the parameters for the respective zone (identified by its 
 NREG number in the SUTRA.inp file) as NREG, SWRES, SWSAT, AA, VN (seperated by tabs/spaces): where
-	- NREG is the zone number 
-	- SWRES is the residual saturation value 
-	- SWSAT is the maximum saturation value (normally 1.0 if working in terms of degree of saturation). 
-	- AA - is the alpha value associated with the van Genutchen curve, it relates to air entry pressure
-	- VN - is 'n' parameter used to fit a curve to lab data. 
+- NREG is the zone number 
+- SWRES is the residual saturation value 
+- SWSAT is the maximum saturation value (normally 1.0 if working in terms of degree of saturation). 
+- AA is the alpha value associated with the van Genutchen curve, it relates to air entry pressure
+- VN is 'n' parameter used to fit a curve to lab data. 
 	 
+*The maximum number of zones allowable in this version of the code is 100*. The reason for this is that common 
+(or global) arrays in FORTRAN 77 can't have a dynamic size at compile time, this approach of the common array was 
+taken as it avoided heavier edits of the original SUTRA code. With that said, this author is open
+to alternative suggestions on how best to approach the dynamic array issue in F77. 
