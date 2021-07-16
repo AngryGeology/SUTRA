@@ -341,12 +341,13 @@ C        RESIDUAL SATURATION, SWRES, GIVEN IN UNITS {L**0}               UNSAT..
 C        PARAMETER, AA, GIVEN IN INVERSE PRESSURE UNITS {m*(s**2)/kg}    UNSAT.........3000
 C        PARAMETER, VN, GIVEN IN UNITS {L**0}                            UNSAT.........3100
 C                                                                        UNSAT.........3200
-      REAL SWRES,AA,VN,SWRM1,AAPVN,VNF,AAPVNN,DNUM,DNOM                  UNSAT.........3300
+      REAL SWRES,SWSAT,AA,VN,SWRM1,AAPVN,VNF,AAPVNN,DNUM,DNOM            UNSAT.........3300
 C     LOAD IN COMMON ARRAYS WITH VG PARAMETERS READ IN BY MAIN PROGRAM (MUST BE 100 IN LENGTH)
       REAL, DIMENSION(1:100) :: SWRES_ARRAY
+      REAL, DIMENSION(1:100) :: SWSAT_ARRAY
       REAL, DIMENSION(1:100) :: AA_ARRAY
       REAL, DIMENSION(1:100) :: VN_ARRAY    
-      COMMON /VGPARAM/ SWRES_ARRAY, AA_ARRAY, VN_ARRAY
+      COMMON /VGPARAM/ SWRES_ARRAY, SWSAT_ARRAY, AA_ARRAY, VN_ARRAY
 
 C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -- UNSAT.........4200
 C                                                                        UNSAT.........4300
@@ -361,10 +362,10 @@ C*********************************************************************** UNSAT..
 C*********************************************************************** UNSAT.........5200
 C                                                                        UNSAT.........5300
 C     SET PARAMETERS FOR CURRENT REGION, KREG(Selects the relevant zone) UNSAT.........5400
-      SWRES=SWRES_ARRAY(KREG)                                                  UNSAT.........5600
-      AA=AA_ARRAY(KREG)                                                        UNSAT.........5700
-      VN=VN_ARRAY(KREG)                                                        UNSAT.........5800
-
+      SWRES=SWRES_ARRAY(KREG)                                            UNSAT.........5600
+      SWSAT=SWSAT_ARRAY(KREG)                                            UNSAT.........5700
+      AA=AA_ARRAY(KREG)                                                  UNSAT.........5800
+      VN=VN_ARRAY(KREG)                                                  UNSAT.........5900
 C                                                                        UNSAT.........6400
 C                                                                        UNSAT.........6500
 C*********************************************************************** UNSAT.........6600
@@ -374,10 +375,10 @@ C     SW VS. PRES   (VALUE CALCULATED ON EACH CALL TO UNSAT)             UNSAT..
 C     CODING MUST GIVE A VALUE TO SATURATION, SW.                        UNSAT.........7000
 C                                                                        UNSAT.........7100
 C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  UNSAT.........7200
-C     THREE PARAMETER MODEL OF VAN GENUCHTEN(1980)                       UNSAT.........7300
-      SWRM1=1.E0-SWRES                                                   UNSAT.........7400
+C     THREE PARAMETER MODEL OF VAN GENUCHTEN(1980) [EQUATION 21]         UNSAT.........7300
+      SWRM1=SWSAT-SWRES                                                  UNSAT.........7400
       AAPVN=1.E0+(AA*(-PRES))**VN                                        UNSAT.........7500
-      VNF=(VN-1.E0)/VN                                                   UNSAT.........7600
+      VNF=1.E0-(1.E0/VN)                                                 UNSAT.........7600
       AAPVNN=AAPVN**VNF                                                  UNSAT.........7700
       S W   =   DBLE (SWRES+SWRM1/AAPVNN)                                UNSAT.........7800
 C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  UNSAT.........7900
@@ -443,13 +444,14 @@ C     VAN GENUCHTEN(1980)                                                RKSAT..
 C        RESIDUAL SATURATION, SWRES, GIVEN IN UNITS {L**0}               RKSAT.........2600
 C        PARAMETER, VN, GIVEN IN UNITS {L**0}                            RKSAT.........2700
 C                                                                        RKSAT.........2800
-      REAL SWRES,VN,SWRM1,VNF,SWSTAR                                     RKSAT.........2900
+      REAL SWRES,SWSAT,VN,SWRM1,VNF,SWSTAR                               RKSAT.........2900
 C                                                                        RKSAT.........3100
 C     LOAD IN COMMON ARRAYS WITH VG PARAMETERS READ IN BY MAIN PROGRAM 
       REAL, DIMENSION(1:100) :: SWRES_ARRAY
+      REAL, DIMENSION(1:100) :: SWSAT_ARRAY
       REAL, DIMENSION(1:100) :: AA_ARRAY
       REAL, DIMENSION(1:100) :: VN_ARRAY    
-      COMMON /VGPARAM/ SWRES_ARRAY, AA_ARRAY, VN_ARRAY
+      COMMON /VGPARAM/ SWRES_ARRAY, SWSAT_ARRAY, AA_ARRAY, VN_ARRAY
       
 C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -- RKSAT.........3800
 C                                                                        RKSAT.........3900
@@ -465,19 +467,20 @@ C*********************************************************************** RKSAT..
 C                                                                        RKSAT.........4900
 C     SET PARAMETERS FOR CURRENT REGION, KREG                            RKSAT.........5000
       SWRES=SWRES_ARRAY(KREG)                                            RKSAT.........5600
-      VN=VN_ARRAY(KREG)   
-C                                                                        RKSAT.........5800
+      SWSAT=SWSAT_ARRAY(KREG)                                            RKSAT.........5700
+      VN=VN_ARRAY(KREG)                                                  RKSAT.........5800
 C                                                                        RKSAT.........5900
+C                                                                        RKSAT.........5950
 C*********************************************************************** RKSAT.........6000
 C*********************************************************************** RKSAT.........6100
 C     RELK VS. P, OR RELK VS. SW.                                        RKSAT.........6200
 C     CODING MUST GIVE A VALUE TO RELATIVE PERMEABILITY, RELK.           RKSAT.........6300
 C                                                                        RKSAT.........6400
 C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  RKSAT.........6500
-C     GENERAL RELATIVE PERMEABILITY MODEL FROM VAN GENUCHTEN(1980)       RKSAT.........6600
-      SWRM1=1.E0-SWRES                                                   RKSAT.........6700
+C     GENERAL RELATIVE PERMEABILITY MODEL FROM VAN GENUCHTEN(1980)[EQ.8] RKSAT.........6600
+      SWRM1=SWSAT-SWRES                                                  RKSAT.........6700
       SWSTAR=(SW-SWRES)/SWRM1                                            RKSAT.........6800
-      VNF=(VN-1.E0)/VN                                                   RKSAT.........6900
+      VNF=1.E0-(1.E0/VN)                                                 RKSAT.........6900
       R E L K   =   DBLE (SQRT(SWSTAR)*                                  RKSAT.........7000
      1                   (1.E0-(1.E0-SWSTAR**(1.E0/VNF))**(VNF))**2)     RKSAT.........7100
 C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  RKSAT.........7200

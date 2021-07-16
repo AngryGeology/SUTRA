@@ -138,9 +138,10 @@ C                                                                        SUTRA_M
 C.....ALLOCATE ARRAYS FOR UNSATURATED PARAMETERS 
       INTEGER ZONE(1:100)  
       REAL, DIMENSION(1:100) :: SWRES_ARRAY
+      REAL, DIMENSION(1:100) :: SWSAT_ARRAY
       REAL, DIMENSION(1:100) :: AA_ARRAY
       REAL, DIMENSION(1:100) :: VN_ARRAY    
-      INTEGER :: NREGIONS, I 						   ! Define values for reading in unsaturated parameters 
+      INTEGER :: NREGIONS, I, CHECKNREGIONS  						   ! Define values for reading in unsaturated parameters 
 C                                                                        SUTRA_MAIN...13800
 C.....PROGRAMMERS SET SUTRA VERSION NUMBER HERE (8 CHARACTERS MAXIMUM)   SUTRA_MAIN...13900
       CHARACTER*8, PARAMETER :: VERN='3.0'                               SUTRA_MAIN...14000
@@ -213,7 +214,7 @@ C                                                                        SUTRA_M
      1   TMAX,DELTP,DELTU,DLTPM1,DLTUM1,IT,ITBCS,ITRST,ITMAX,TSTART      SUTRA_MAIN...20700
       COMMON /VER/ VERNUM, VERNIN                                        SUTRA_MAIN...20800
 C.....MAKE VG PARAMETERS GLOBAL 
-      COMMON /VGPARAM/ SWRES_ARRAY,AA_ARRAY,VN_ARRAY  
+      COMMON /VGPARAM/ SWRES_ARRAY,SWSAT_ARRAY,AA_ARRAY,VN_ARRAY  
 
 C....."NSLVRS" AND THE ARRAYS "SOLWRD" AND "SOLNAM" ARE INITIALIZED      SUTRA_MAIN...20900
 C        IN THE BLOCK-DATA SUBPROGRAM "BDINIT"                           SUTRA_MAIN...21000
@@ -672,13 +673,16 @@ C.....IF UNSATAUTED THEN READ IN UNSAT PARAMETERS
          OPEN(UNIT=99, FILE='param.vg')
          WRITE(K3,*) ''
          WRITE(K3,*) '          U N S A T U R A T E D   P A R A M' 
-         WRITE(K3,*) '          (ZONE, SWRES, AA, VN)' 
+         WRITE(K3,*) '          (ZONE, SWRES, SWSAT, AA, VN)' 
          READ(99, *) NREGIONS
          DO I=1,NREGIONS,1
-            READ(99,*) ZONE(I),SWRES_ARRAY(I),AA_ARRAY(I),VN_ARRAY(I)
-            WRITE(K3,*) ZONE(I),SWRES_ARRAY(I),AA_ARRAY(I),VN_ARRAY(I) !SHOW PARAMETERS IN OUTPUT FILE 
+            READ(99,*) ZONE(I),SWRES_ARRAY(I),SWSAT_ARRAY(I), 
+     1 AA_ARRAY(I),VN_ARRAY(I)
+            WRITE(K3,*) ZONE(I),SWRES_ARRAY(I),SWSAT_ARRAY(I), 
+     1 AA_ARRAY(I),VN_ARRAY(I) 				   !SHOW PARAMETERS IN OUTPUT FILE 
+            CHECKNREGIONS = ZONE(I)
          END DO 
-         CLOSE(99) 
+         CLOSE(99)  
 C.....TODO: CHECK NREGION == MAX(ZONE) ELSE CALL ERROR 
 C.....END OF READING IN UNSAT PARAMETERS 
       ELSE IF (CUNSAT.EQ.'SATURATED') THEN                               SUTRA_MAIN...66100
