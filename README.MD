@@ -26,3 +26,8 @@ NREG number in the SUTRA.inp file) as NREG, SWRES, SWSAT, AA, VN (seperated by t
 (or global) arrays in FORTRAN 77 can't have a dynamic size at compile time, this approach of the common array was 
 taken as it avoided heavier edits of the original SUTRA code. With that said, this author is open
 to alternative suggestions on how best to approach the dynamic array issue in F77. 
+
+## Licensing 
+As per documentation on the original [download source for SUTRA 3.0](https://www.usgs.gov/software/sutra-a-model-2d-or-3d-saturated-unsaturated-variable-density-ground-water-flow-solute-or) this software is free to be modified and distributed. See quotation below: 
+
+"As a work of the United States Government, this USGS product is in the public domain within the United States. You can copy, modify, distribute, and perform the work, even for commercial purposes, all without asking permission. Additionally, USGS waives copyright and related rights in the work worldwide through CC0 1.0 Universal Public Domain Dedication." 
