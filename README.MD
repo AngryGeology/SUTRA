@@ -1,4 +1,4 @@
-## MODIFIED SUTRA 3.0 
+# MODIFIED SUTRA 3.0 
 
 This repo is an update to the SUTRA 3.0 hydrological modelling code written in Fortran 77. While the SUTRA 3.0 
 code does not require any update, it has a limitation in that the unsaturated flow properties cannot be assigned 
