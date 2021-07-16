@@ -1,5 +1,4 @@
 cd source 
-#gfortran *.f -o /home/jimmy/programs/SUTRA_3_0/bin/sutra
 gfortran --std legacy -c lmods_3_0.f #-o lmods_3_0.o
 gfortran --std legacy -c fmods_3_0.f #-o fmods_3_0.o
 gfortran --std legacy *.o -c lsubs_3_0.f #-o lsubs_3_0.o
