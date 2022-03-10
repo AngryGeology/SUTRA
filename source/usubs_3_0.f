@@ -342,11 +342,12 @@ C        PARAMETER, AA, GIVEN IN INVERSE PRESSURE UNITS {m*(s**2)/kg}    UNSAT..
 C        PARAMETER, VN, GIVEN IN UNITS {L**0}                            UNSAT.........3100
 C                                                                        UNSAT.........3200
       REAL SWRES,SWSAT,AA,VN,SWRM1,AAPVN,VNF,AAPVNN,DNUM,DNOM            UNSAT.........3300
-C     LOAD IN COMMON ARRAYS WITH VG PARAMETERS READ IN BY MAIN PROGRAM (MUST BE 100 IN LENGTH)
-      REAL, DIMENSION(1:100) :: SWRES_ARRAY
-      REAL, DIMENSION(1:100) :: SWSAT_ARRAY
-      REAL, DIMENSION(1:100) :: AA_ARRAY
-      REAL, DIMENSION(1:100) :: VN_ARRAY    
+      INTEGER, PARAMETER :: MAXNREGIONS = 5   
+C     LOAD IN COMMON ARRAYS WITH VG PARAMETERS READ IN BY MAIN PROGRAM (MUST BE MAXNREGIONS IN LENGTH)
+      REAL, DIMENSION(1:MAXNREGIONS) :: SWRES_ARRAY
+      REAL, DIMENSION(1:MAXNREGIONS) :: SWSAT_ARRAY
+      REAL, DIMENSION(1:MAXNREGIONS) :: AA_ARRAY
+      REAL, DIMENSION(1:MAXNREGIONS) :: VN_ARRAY    
       COMMON /VGPARAM/ SWRES_ARRAY, SWSAT_ARRAY, AA_ARRAY, VN_ARRAY
 
 C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -- UNSAT.........4200
@@ -380,7 +381,7 @@ C     THREE PARAMETER MODEL OF VAN GENUCHTEN(1980) [EQUATION 21]         UNSAT..
       AAPVN=1.E0+(AA*(-PRES))**VN                                        UNSAT.........7500
       VNF=1.E0-(1.E0/VN)                                                 UNSAT.........7600
       AAPVNN=AAPVN**VNF                                                  UNSAT.........7700
-      S W   =   DBLE (SWRES+SWRM1/AAPVNN)                                UNSAT.........7800
+      S W   =   DBLE (SWRES+(SWRM1/AAPVNN))                              UNSAT.........7800
 C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  UNSAT.........7900
 C*********************************************************************** UNSAT.........8000
 C*********************************************************************** UNSAT.........8100
@@ -444,13 +445,13 @@ C     VAN GENUCHTEN(1980)                                                RKSAT..
 C        RESIDUAL SATURATION, SWRES, GIVEN IN UNITS {L**0}               RKSAT.........2600
 C        PARAMETER, VN, GIVEN IN UNITS {L**0}                            RKSAT.........2700
 C                                                                        RKSAT.........2800
-      REAL SWRES,SWSAT,VN,SWRM1,VNF,SWSTAR                               RKSAT.........2900
-C                                                                        RKSAT.........3100
+      REAL SWRES,SWSAT,VN,M,SWSTAR,LHS,MID,RHS,KR,U,RHO,G,KRP            RKSAT.........2900
+      INTEGER, PARAMETER :: MAXNREGIONS = 5 
 C     LOAD IN COMMON ARRAYS WITH VG PARAMETERS READ IN BY MAIN PROGRAM 
-      REAL, DIMENSION(1:100) :: SWRES_ARRAY
-      REAL, DIMENSION(1:100) :: SWSAT_ARRAY
-      REAL, DIMENSION(1:100) :: AA_ARRAY
-      REAL, DIMENSION(1:100) :: VN_ARRAY    
+      REAL, DIMENSION(1:MAXNREGIONS) :: SWRES_ARRAY
+      REAL, DIMENSION(1:MAXNREGIONS) :: SWSAT_ARRAY
+      REAL, DIMENSION(1:MAXNREGIONS) :: AA_ARRAY
+      REAL, DIMENSION(1:MAXNREGIONS) :: VN_ARRAY    
       COMMON /VGPARAM/ SWRES_ARRAY, SWSAT_ARRAY, AA_ARRAY, VN_ARRAY
       
 C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -- RKSAT.........3800
@@ -478,11 +479,21 @@ C     CODING MUST GIVE A VALUE TO RELATIVE PERMEABILITY, RELK.           RKSAT..
 C                                                                        RKSAT.........6400
 C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  RKSAT.........6500
 C     GENERAL RELATIVE PERMEABILITY MODEL FROM VAN GENUCHTEN(1980)[EQ.8] RKSAT.........6600
-      SWRM1=SWSAT-SWRES                                                  RKSAT.........6700
-      SWSTAR=(SW-SWRES)/SWRM1                                            RKSAT.........6800
-      VNF=1.E0-(1.E0/VN)                                                 RKSAT.........6900
-      R E L K   =   DBLE (SQRT(SWSTAR)*                                  RKSAT.........7000
-     1                   (1.E0-(1.E0-SWSTAR**(1.E0/VNF))**(VNF))**2)     RKSAT.........7100
+
+      SWSTAR=(SW-SWRES)/(SWSAT-SWRES)                                    RKSAT.........6800
+      M=1.E0-(1.E0/VN)                                                   RKSAT.........6900
+      LHS=SQRT(SWSTAR)
+      MID=(1.E0-(SWSTAR**(1.E0/M)))**M
+      RHS=(1.E0-MID)**2 
+      KR=LHS*RHS 
+C     NOW CONVERT TO PERMEABILITY
+      U=8.9E-4 !Pa.s 
+      RHO=1000.E0 !kg/ms^3 
+      G=9.81E0 !m/s^2
+      KRP = KR*1.E0 ! (KR*U)/(RHO*G)
+      
+      R E L K   =   DBLE (KRP)
+
 C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  RKSAT.........7200
 C*********************************************************************** RKSAT.........7300
 C*********************************************************************** RKSAT.........7400

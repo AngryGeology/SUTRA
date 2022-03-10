@@ -136,11 +136,12 @@ C                                                                        SUTRA_M
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)                                SUTRA_MAIN...13600
       PARAMETER (NCOLMX=9)                                               SUTRA_MAIN...13700
 C.....ALLOCATE ARRAYS FOR UNSATURATED PARAMETERS 
-      INTEGER ZONE(1:100)  
-      REAL, DIMENSION(1:100) :: SWRES_ARRAY
-      REAL, DIMENSION(1:100) :: SWSAT_ARRAY
-      REAL, DIMENSION(1:100) :: AA_ARRAY
-      REAL, DIMENSION(1:100) :: VN_ARRAY    
+      INTEGER, PARAMETER :: MAXNREGIONS = 5 
+      INTEGER ZONE(1:MAXNREGIONS)  
+      REAL, DIMENSION(1:MAXNREGIONS) :: SWRES_ARRAY
+      REAL, DIMENSION(1:MAXNREGIONS) :: SWSAT_ARRAY
+      REAL, DIMENSION(1:MAXNREGIONS) :: AA_ARRAY
+      REAL, DIMENSION(1:MAXNREGIONS) :: VN_ARRAY    
       INTEGER :: NREGIONS, I, CHECKNREGIONS  						   ! Define values for reading in unsaturated parameters 
 C                                                                        SUTRA_MAIN...13800
 C.....PROGRAMMERS SET SUTRA VERSION NUMBER HERE (8 CHARACTERS MAXIMUM)   SUTRA_MAIN...13900
@@ -214,7 +215,7 @@ C                                                                        SUTRA_M
      1   TMAX,DELTP,DELTU,DLTPM1,DLTUM1,IT,ITBCS,ITRST,ITMAX,TSTART      SUTRA_MAIN...20700
       COMMON /VER/ VERNUM, VERNIN                                        SUTRA_MAIN...20800
 C.....MAKE VG PARAMETERS GLOBAL 
-      COMMON /VGPARAM/ SWRES_ARRAY,SWSAT_ARRAY,AA_ARRAY,VN_ARRAY  
+      COMMON /VGPARAM/ SWRES_ARRAY,SWSAT_ARRAY,AA_ARRAY,VN_ARRAY
 
 C....."NSLVRS" AND THE ARRAYS "SOLWRD" AND "SOLNAM" ARE INITIALIZED      SUTRA_MAIN...20900
 C        IN THE BLOCK-DATA SUBPROGRAM "BDINIT"                           SUTRA_MAIN...21000
