@@ -486,10 +486,6 @@ C     GENERAL RELATIVE PERMEABILITY MODEL FROM VAN GENUCHTEN(1980)[EQ.8] RKSAT..
       MID=(1.E0-(SWSTAR**(1.E0/M)))**M
       RHS=(1.E0-MID)**2 
       KR=LHS*RHS 
-C     NOW CONVERT TO PERMEABILITY
-      U=8.9E-4 !Pa.s 
-      RHO=1000.E0 !kg/ms^3 
-      G=9.81E0 !m/s^2
       KRP = KR*1.E0 ! (KR*U)/(RHO*G)
       
       R E L K   =   DBLE (KRP)

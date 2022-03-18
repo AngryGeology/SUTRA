@@ -22,7 +22,7 @@ NREG number in the SUTRA.inp file) as NREG, SWRES, SWSAT, AA, VN (seperated by t
 - AA is the alpha value associated with the van Genutchen curve, it relates to air entry pressure
 - VN is 'n' parameter used to fit a curve to lab data. 
 	 
-*The maximum number of zones allowable in this version of the code is 100*. The reason for this is that common 
+*The maximum number of zones allowable in this version of the code is 5*. The reason for this is that common 
 (or global) arrays in FORTRAN 77 can't have a dynamic size at compile time, this approach of the common array was 
 taken as it avoided heavier edits of the original SUTRA code. With that said, this author is open
 to alternative suggestions on how best to approach the dynamic array issue in F77. 
