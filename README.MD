@@ -7,7 +7,7 @@ analysis and monte-carlo runs.  Hence in this update the code has been edited su
 of unsaturated hydrological properties following the van Genutchen school of thoughts when it comes to computing degree of 
 saturation and relative hydrualic conductivity in unsaturated conditions. 
 
-To use the code compile it with the attached bash script (windows compile not yet attempted). All documentation 
+To use the code compile it with the attached bash script, or, if on windows a static binary is now available. All documentation 
 released for SUTRA 3.0 is valid for this version as well. However an extra file is required in the case that 
 unsaturated conditions are present, see below. 
 
@@ -26,6 +26,16 @@ NREG number in the SUTRA.inp file) as NREG, SWRES, SWSAT, AA, VN (seperated by t
 (or global) arrays in FORTRAN 77 can't have a dynamic size at compile time, this approach of the common array was 
 taken as it avoided heavier edits of the original SUTRA code. With that said, this author is open
 to alternative suggestions on how best to approach the dynamic array issue in F77. 
+
+### example
+The contents of param.vg should look like this: 
+```
+4
+1 0.157895 1.000000         0.000050 1.200000
+2 0.208333 1.000000         0.000013 1.440000
+3 0.037209 1.000000         0.000050 1.750000
+4 0.208333 1.000000         0.000013 1.440000
+```
 
 ## Licensing 
 As per documentation on the original [download source for SUTRA 3.0](https://www.usgs.gov/software/sutra-a-model-2d-or-3d-saturated-unsaturated-variable-density-ground-water-flow-solute-or) this software is free to be modified and distributed. See quotation below: 
