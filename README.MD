@@ -7,9 +7,14 @@ analysis and monte-carlo runs.  Hence in this update the code has been edited su
 of unsaturated hydrological properties following the van Genutchen school of thoughts when it comes to computing degree of 
 saturation and relative hydrualic conductivity in unsaturated conditions. 
 
-To use the code compile it with the attached bash script, or, if on windows a static binary is now available. All documentation 
-released for SUTRA 3.0 is valid for this version as well. However an extra file is required in the case that 
-unsaturated conditions are present, see below. 
+### usage 
+To get started, on windows there is a statically compiled executable made using the recently released "ifx" compiler from
+Intel. This version should work with modern Intel and AMD cpus. If using linux there is a bash script to compile the code 
+using gfortran, there is also a statically compiled version of SUTRA for which should work on Debian based systems (unsure 
+on other flavours of Linux).  
+
+All documentation released for SUTRA 3.0 is valid for this version as well. However an extra file is required 
+in the case that unsaturated conditions are present, see below. 
 
 ## param.vg 
 If unsaturated conditions are present, then the following van Genutchen parameters file should be written to 
@@ -41,3 +46,7 @@ The contents of param.vg should look like this:
 As per documentation on the original [download source for SUTRA 3.0](https://www.usgs.gov/software/sutra-a-model-2d-or-3d-saturated-unsaturated-variable-density-ground-water-flow-solute-or) this software is free to be modified and distributed. See quotation below: 
 
 "As a work of the United States Government, this USGS product is in the public domain within the United States. You can copy, modify, distribute, and perform the work, even for commercial purposes, all without asking permission. Additionally, USGS waives copyright and related rights in the work worldwide through CC0 1.0 Universal Public Domain Dedication." 
+
+## Known Issue
+When the code is compiled with gfortran the code crashes once the SUTRA simulation has been run. This does not effect results as far as I can tell, so I'm unsure why 
+this occurs. Therefore I am not addressing this issue at this time. 
